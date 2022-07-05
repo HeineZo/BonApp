@@ -1,0 +1,1817 @@
+#:import WipeTransition kivy.uix.screenmanager.WipeTransition
+
+
+<WindowManager>:
+    #Réference des différentes pages/jours, développé par Enzo#
+    transition: WipeTransition()
+    Lundi: 
+    LundiSoir:
+    Mardi:
+    MardiSoir:
+    Mercredi:
+    MercrediSoir:
+    Jeudi:
+    JeudiSoir:
+    Vendredi:
+
+
+<Background>:
+    #Arrière-plan, développé par Enzo#
+    id: background       #Référence      
+    canvas:        
+        Color: 
+            rgb: root.bg_color   #Ecran blanc ou noir si le mode sombre est activé
+        Rectangle: 
+            size: [root.width,root.height]  #Dimensions
+            pos: [0,0]
+            
+    FloatLayout:
+        canvas: 
+            Color: 
+                rgb: root.ban_color #Bannière verte ou noir si le mode sombre est activé
+
+            Rectangle: 
+                size: [root.width,root.height/10]     ####Dimensions
+                pos: [0, root.height - root.height/10]   #### 
+
+        Image:
+            id: imageView                        #Référence
+            source: 'img/bon_app.png'                #Logo Canteen
+            pos:[root.width/2-35, root.height - root.height * 0.1]
+            size_hint: None, None
+            size: 75, root.height/10
+            allow_stretch: True
+            keep_ratio: True
+        
+        Label:
+            color: root.txt_color #Couleur du texte afficher, noir ou blanc si le mode sombre est activé
+
+        ToggleButton:
+            #Bouton du mode sombre#
+            id: darkmode    #Référence
+            background_color: 0,0,0,0         #Bouton invisible
+            pos:[root.width-100, root.height - root.height * 0.1] #Position
+            size_hint: None, None
+            size: self.size[0], self.size[1]                     #Taille
+            canvas:
+                Rectangle:                     #Image dans le bouton
+                    size: (root.height/20,root.height/20)
+                    pos: [root.width - 70, root.height - root.height * 0.075]
+                    source: 'img/day_night.png'
+            #Bouton de conditions#
+            on_state:
+                #Si le bouton est enclenché, alors activation du mode nuit et variable globale égale 1
+                if self.state == "down": \     
+                app.root.night(background); \  
+                app.root.MY_GLOBAL = 1
+                #Si le bouton est déjà enclenché, alors mode jour et variable globale égale à 0
+                elif self.state == "normal": \  
+                app.root.day(background); \     
+                app.root.MY_GLOBAL = 0
+		
+	Button:
+		#Bouton Canteen renvoyant au menu du jour, développé par Elouann#
+		background_color: 0,0,0,0
+        size_hint: None, None
+        size: self.size[0], root.height/10
+        pos:[root.width/2-self.size[0]/2,root.height-self.size[1]]
+        on_release:
+            app.root.current = app.menu_of_day()
+			
+
+<SlidingPopup@GridLayout>:
+    #Menu déroulant, développé par Enzo#²
+    id: sliding_menu    #Référencement
+    cols: 1
+    canvas:
+        Color:
+            rgba: .066,.074,.078,1       #Rectangle gris/noir
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    GridLayout:
+        rows: 1
+        ScrollView: 
+            #Crée quelque chose de scrollable
+            GridLayout:
+                id: container_x
+                size_hint_x: None
+                rows: 7                 #7 rangées
+                cols: 2                 #2 colonnes
+                padding: 10             #Espacement
+                spacing: 20             #Entre les cases
+                col_default_width: root.width*0.2
+                width: root.width * 2
+                                
+                #Création des boutons permettant d'accéder aux jours#
+                Button:
+                    text: "Lundi"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)  #Bouton invisible
+                    on_release:
+                        app.root.current = 'lundi'  #Aller à page Lundi
+                
+                Button:
+                    text: "Lundi soir"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'lundi_soir'
+                        
+                        
+                Button:
+                    text: "Mardi"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'mardi'
+                Button:
+                    text: "Mardi soir"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'mardi_soir'
+                        
+                Button:
+                    text: "Mercredi"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'mercredi'
+
+                Button:
+                    text: "Mercredi soir"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'mercredi_soir'
+                    
+                Button:
+                    text: "Jeudi"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'jeudi'
+
+                        
+                Button:
+                    text: "Jeudi soir"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'jeudi_soir'
+                Button:
+                    text: "Vendredi"
+                    color: 1,1,1,1
+                    background_color: (0, 0, 0, 0)
+                    on_release:
+                        app.root.current = 'vendredi'          
+    
+    FloatLayout:
+        size_hint: 1, 0.2
+        Button:
+            #Bouton crédit développé par Elouann et Enzo#
+            background_color: 0,0,0,0   #Bouton transparent
+            size_hint: None, None
+            size: self.size[0], self.size[1]
+            pos_hint: {'center_x': 0.3, 'center_y': 0.5}
+            canvas:
+                Rectangle:
+                    size: (root.height/20,root.height/20)
+                    pos: (self.pos[0]+self.size[0]/2) - 15, (self.pos[1]+self.size[1]/2) - 15
+                    source: 'img/credits.png'    #Image dans un bouton
+            #Lorsque qu'on appuie sur le bouton, le popup apparaît#
+            on_release:
+                app.root.credit_popup()
+
+        Button:
+            #Bouton aide développé par Elouann et Enzo#
+            background_color: 0,0,0,0
+            size_hint: None, None
+            size: self.size[0], self.size[1]
+            pos_hint: {'center_x': 0.7, 'center_y': 0.5}
+            canvas:
+                Rectangle:
+                    size: (root.height/20,root.height/20)
+                    pos: (self.pos[0]+self.size[0]/2) - 15, (self.pos[1]+self.size[1]/2) - 15
+                    source: 'img/question-mark-icon.png'
+            on_release:
+                app.root.help_popup()
+
+<CreditPopup>:
+    #Popup crédit, développé par Elouann#
+    Label:
+        text: "Application cr"+u'\u00E9'+""+u'\u00E9'+"e par\nEnzo, Elouann, Mathys\n (et spécial remerciement\n à Flavien)" #"u'\u00E9'" correspond à un é
+        size_hint: 0.6, 0.1             #Taille
+        pos_hint: {'x': 0.2, 'top': 0.85}  #Position
+        halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+
+    Label:
+        text: "Sp"+u'\u00E9'+"cialit"+u'\u00E9'+" NSI, Terminale"
+        size_hint: 0.7, 0.1
+        pos_hint: {'x': 0.15, 'y': 0.4}
+        halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+        
+    Label:
+        text: "Lyc"+u'\u00E9'+"e Marcelin Berthelot \n-\n 2020/2021"
+        size_hint: 0.8, 0.1
+        pos_hint: {'x': 0.1, 'y': 0.12}
+        halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+
+<HelpPopup>:
+    #Popup aide, développé par Elouann#
+    Label:
+		text: "Tips :"
+		size_hint: 0.7, 0.2
+		pos_hint: {'x': -0.21, 'top': 1}
+		underline: True
+		bold: True
+		halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+	Label:
+        text: "Les mets marqu"+u'\u00E9'+"s en vert sont bio"
+        size_hint: 0.6, 0.2
+        pos_hint: {'x': 0.2, 'top': 0.85}
+		bold: True
+		halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+    Label:
+        text: "Pour acc"+u'\u00E9'+"der aux menus du soir :"
+        size_hint: 0.7, 0.2
+        pos_hint: {'x': 0.15, 'y': 0.48}
+		bold: True
+		halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+    Label:
+        text: "- Aller dans le volet d"+u'\u00E9'+"roulant"
+        size_hint: 0.8, 0.2
+        pos_hint: {'x': 0.1, 'y': 0.38}
+        halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+    Label:
+        text: "- Glisser vers la gauche"
+        size_hint: 0.9, 0.2
+        pos_hint: {'x': 0.05, 'y': 0.28}
+        halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+	Label:
+        text: "Appuyer sur le logo Canteen"
+        size_hint: 0.9, 0.2
+        pos_hint: {'x': 0.05, 'y': 0.1}
+		bold: True
+		halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+	Label:
+		text: "permet de revenir au menu du jour"
+		size_hint: 0.9, 0.2
+        pos_hint: {'x': 0.05, 'y': 0}
+		bold: True
+		halign: 'center'
+        height: self.texture_size[1]
+        text_size: self.width, None
+        
+<Lundi>:
+	#Développé par Enzo
+    name: 'lundi'
+    orientation: "vertical"
+    #Avant d'entrer, si la variable gobale est égale à 1, alors le bouton du mode sombre sera déjà enclenché
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        #Sinon, il est par défaut
+        else: \
+        background.ids.darkmode.state= 'normal'
+    
+    Background:
+        id: background #Référencement du fond d'écran afin de l'afficher
+        
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1 #1 colonne
+
+
+                Label:
+                    text: "Lundi"
+                    bold: True     #En gras
+                    color: background.txt_color   #Couleur de la police
+                    font_size: menu.size[0]/10  ####Taille de la police
+                    size_hint_y: None ###
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True         #Souligné
+                    font_size: menu.size[0]/15  ###      
+                    size_hint_y: None ####
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    halign: 'center'
+                    
+                Label:
+                    #Entrée
+                    markup: True     #Permet de mettre en couleur, en italique, en gras etc.. Un seul mot dans la phrase
+                    #S'il n'y a pas de mets bio, afficher le les mets normalement,
+                    #Sinon, afficher les mets normalement jusqu'à ce qu'il y ai un '*', le retirer et afficher le met qui suit en vert et italique
+                    text: root.entree_lundi if (app.bio(root.entree_lundi) == False) else root.entree_lundi[:root.entree_lundi.index("*")] +"[i][color=#0EA33E]"+ root.entree_lundi[root.entree_lundi.index("*"):].replace('*', "") + "[/color][/i]"       
+                    color: background.txt_color
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                
+                Label:
+                    text: ""
+                    size_hint_y: None
+
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+
+                Label:
+                    #Plat
+                    markup: True               #La même chose que pour l'entrée
+                    text: root.plat_lundi if (app.bio(root.plat_lundi) == False) else root.plat_lundi[:root.plat_lundi.index("*")] +"[i][color=#0EA33E]"+ root.plat_lundi[root.plat_lundi.index("*"):].replace('*', "") + "[/color][/i]"         
+                    font_size: menu.size[0]/30
+                    color: background.txt_color
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+   
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    #Produits laitiers
+                    markup: True            #La même chose que pour l'entrée
+                    text: root.laitier_lundi if (app.bio(root.laitier_lundi) == False) else root.laitier_lundi[:root.laitier_lundi.index("*")] +"[i][color=#0EA33E]"+ root.laitier_lundi[root.laitier_lundi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    color: background.txt_color 
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    #Desserts
+                    markup: True  #La même chose que pour l'entrée
+                    text: root.dessert_lundi if (app.bio(root.dessert_lundi) == False) else root.dessert_lundi[:root.dessert_lundi.index("*")] +"[i][color=#0EA33E]"+ root.dessert_lundi[root.dessert_lundi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    color: background.txt_color 
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    #Case vide afin que les plats ne soient pas trop bas car ils remplissent automatiquement toute la page
+                    text: ""
+                    size_hint_y: None
+                    
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}
+
+            
+<Mardi>:
+	#Développé par Mathys
+    name: 'mardi'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+            
+    Background:
+        id: background
+        
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+
+                Label:
+                    text: "Mardi"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None  
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+
+                Label:
+                    markup: True
+                    text: root.entree_mardi if (app.bio(root.entree_mardi) == False) else root.entree_mardi[:root.entree_mardi.index("*")] +"[i][color=#0EA33E]"+ root.entree_mardi[root.entree_mardi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                    
+                
+                Label:
+                    text: ""
+                    size_hint_y: None
+
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None 
+
+                    
+                Label:
+                    markup: True
+                    text: root.plat_mardi if (app.bio(root.plat_mardi) == False) else root.plat_mardi[:root.plat_mardi.index("*")] +"[i][color=#0EA33E]"+ root.plat_mardi[root.plat_mardi.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                
+                    
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_mardi if (app.bio(root.laitier_mardi) == False) else root.laitier_mardi[:root.laitier_mardi.index("*")] +"[i][color=#0EA33E]"+ root.laitier_mardi[root.laitier_mardi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    color: background.txt_color
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None 
+ 
+                Label:
+                    markup: True
+                    text: root.dessert_mardi if (app.bio(root.dessert_mardi) == False) else root.dessert_mardi[:root.dessert_mardi.index("*")] +"[i][color=#0EA33E]"+ root.dessert_mardi[root.dessert_mardi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}
+        
+<Mercredi>:
+	#Développé par Mathys
+    name: 'mercredi'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+    
+    Background:
+        id: background
+        
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+
+
+                Label:
+                    text: "Mercredi"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None    
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    markup: True
+                    text: root.entree_mercredi if (app.bio(root.entree_mercredi) == False) else root.entree_mercredi[:root.entree_mercredi.index("*")] +"[i][color=#0EA33E]"+ root.entree_mercredi[root.entree_mercredi.index("*"):].replace('*', "") + "[/color][/i]"
+                    color: background.txt_color
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                
+                Label:
+                    text: ""
+                    size_hint_y: None
+                
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                    
+                Label:
+                    markup: True
+                    text: root.plat_mercredi if (app.bio(root.plat_mercredi) == False) else root.plat_mercredi[:root.plat_mercredi.index("*")] +"[i][color=#0EA33E]"+ root.plat_mercredi[root.plat_mercredi.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_mercredi if (app.bio(root.laitier_mercredi) == False) else root.laitier_mercredi[:root.laitier_mercredi.index("*")] +"[i][color=#0EA33E]"+ root.laitier_mercredi[root.laitier_mercredi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color  
+    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.dessert_mercredi if (app.bio(root.dessert_mercredi) == False) else root.dessert_mercredi[:root.dessert_mercredi.index("*")] +"[i][color=#0EA33E]"+ root.dessert_mercredi[root.dessert_mercredi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+            
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}
+
+
+<Jeudi>:
+	#Développé par Mathys
+    name: 'jeudi'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+        
+    Background:
+        id: background
+        
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+
+                Label:
+                    text: "Jeudi"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.entree_jeudi if (app.bio(root.entree_jeudi) == False) else root.entree_jeudi[:root.entree_jeudi.index("*")] +"[i][color=#0EA33E]"+ root.entree_jeudi[root.entree_jeudi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                
+                    
+                Label:
+                    markup: True
+                    text: root.plat_jeudi if (app.bio(root.plat_jeudi) == False) else root.plat_jeudi[:root.plat_jeudi.index("*")] +"[i][color=#0EA33E]"+ root.plat_jeudi[root.plat_jeudi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+   
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_jeudi if (app.bio(root.laitier_jeudi) == False) else root.laitier_jeudi[:root.laitier_jeudi.index("*")] +"[i][color=#0EA33E]"+ root.laitier_jeudi[root.laitier_jeudi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+ 
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.dessert_jeudi if (app.bio(root.dessert_jeudi) == False) else root.dessert_jeudi[:root.dessert_jeudi.index("*")] +"[i][color=#0EA33E]"+ root.dessert_jeudi[root.dessert_jeudi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}          
+
+        
+<Vendredi>:
+	#Développé par Mathys
+    name: 'vendredi'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+        
+    Background:
+        id: background
+    
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+                
+                Label:
+                    text: "Vendredi"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.entree_vendredi if (app.bio(root.entree_vendredi) == False) else root.entree_vendredi[:root.entree_vendredi.index("*")] +"[i][color=#0EA33E]"+ root.entree_vendredi[root.entree_vendredi.index("*"):].replace('*', "") + "[/color][/i]"  
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                    
+                Label:
+                    markup: True
+                    text: root.plat_vendredi if (app.bio(root.plat_vendredi) == False) else root.plat_vendredi[:root.plat_vendredi.index("*")] +"[i][color=#0EA33E]"+ root.plat_vendredi[root.plat_vendredi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_vendredi if (app.bio(root.laitier_vendredi) == False) else root.laitier_vendredi[:root.laitier_vendredi.index("*")] +"[i][color=#0EA33E]"+ root.laitier_vendredi[root.laitier_vendredi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.dessert_vendredi if (app.bio(root.dessert_vendredi) == False) else root.dessert_vendredi[:root.dessert_vendredi.index("*")] +"[i][color=#0EA33E]"+ root.dessert_vendredi[root.dessert_vendredi.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}       
+                    
+
+    
+<LundiSoir>:
+	#Développé par Mathys
+    name: 'lundi_soir'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+        
+    Background:
+        id: background
+    
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+                
+                Label:
+                    text: "Lundi soir"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.entree_lundi_soir if (app.bio(root.entree_lundi_soir) == False) else root.entree_lundi_soir[:root.entree_lundi_soir.index("*")] +"[i][color=#0EA33E]"+ root.entree_lundi_soir[root.entree_lundi_soir.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.plat_lundi_soir if (app.bio(root.plat_lundi_soir) == False) else root.plat_lundi_soir[:root.plat_lundi_soir.index("*")] +"[i][color=#0EA33E]"+ root.plat_lundi_soir[root.plat_lundi_soir.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_lundi_soir if (app.bio(root.laitier_lundi_soir) == False) else root.laitier_lundi_soir[:root.laitier_lundi_soir.index("*")] +"[i][color=#0EA33E]"+ root.laitier_lundi_soir[root.laitier_lundi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.dessert_lundi_soir if (app.bio(root.dessert_lundi_soir) == False) else root.dessert_lundi_soir[:root.dessert_lundi_soir.index("*")] +"[i][color=#0EA33E]"+ root.dessert_lundi_soir[root.dessert_lundi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}
+        
+<MardiSoir>:
+	#Développé par Mathyss
+    name: 'mardi_soir'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+        
+    Background:
+        id: background
+        
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+
+                Label:
+                    text: "Mardi soir"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                    
+                Label:
+                    markup: True
+                    text: root.entree_mardi_soir if (app.bio(root.entree_mardi_soir) == False) else root.entree_mardi_soir[:root.entree_mardi_soir.index("*")] +"[i][color=#0EA33E]"+ root.entree_mardi_soir[root.entree_mardi_soir.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.plat_mardi_soir if (app.bio(root.plat_mardi_soir) == False) else root.plat_mardi_soir[:root.plat_mardi_soir.index("*")] +"[i][color=#0EA33E]"+ root.plat_mardi_soir[root.plat_mardi_soir.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    color: background.txt_color
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_mardi_soir if (app.bio(root.laitier_mardi_soir) == False) else root.laitier_mardi_soir[:root.laitier_mardi_soir.index("*")] +"[i][color=#0EA33E]"+ root.laitier_mardi_soir[root.laitier_mardi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                
+                Label:
+                    text: ""
+                    size_hint_y: None  
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.dessert_mardi_soir if (app.bio(root.dessert_mardi_soir) == False) else root.dessert_mardi_soir[:root.dessert_mardi_soir.index("*")] +"[i][color=#0EA33E]"+ root.dessert_mardi_soir[root.dessert_mardi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}
+
+<MercrediSoir>:
+	#Développé par Mathys
+    name: 'mercredi_soir'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+        
+    Background:
+        id: background
+        
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+
+                Label:
+                    text: "Mercredi soir"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.entree_mercredi_soir if (app.bio(root.entree_mercredi_soir) == False) else root.entree_mercredi_soir[:root.entree_mercredi_soir.index("*")] +"[i][color=#0EA33E]"+ root.entree_mercredi_soir[root.entree_mercredi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.plat_mercredi_soir if (app.bio(root.plat_mercredi_soir) == False) else root.plat_mercredi_soir[:root.plat_mercredi_soir.index("*")] +"[i][color=#0EA33E]"+ root.plat_mercredi_soir[root.plat_mercredi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_mercredi_soir if (app.bio(root.laitier_mercredi_soir) == False) else root.laitier_mercredi_soir[:root.laitier_mercredi_soir.index("*")] +"[i][color=#0EA33E]"+ root.laitier_mercredi_soir[root.laitier_mercredi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color  
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.dessert_mercredi_soir if (app.bio(root.dessert_mercredi_soir) == False) else root.dessert_mercredi_soir[:root.dessert_mercredi_soir.index("*")] +"[i][color=#0EA33E]"+ root.dessert_mercredi_soir[root.dessert_mercredi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}
+    
+<JeudiSoir>:
+	#Développé par Mathys
+    name: 'jeudi_soir'
+    orientation: "vertical"
+    on_pre_enter:
+        if app.root.MY_GLOBAL == 1: \
+        background.ids.darkmode.state = 'down'
+        else: \
+        background.ids.darkmode.state= 'normal'
+        
+    Background:
+        id: background
+        
+    FloatLayout:
+        ScrollView:
+            id: menu
+            size_hint_y: .87
+            GridLayout:
+                size_hint_y: None #######
+                height: self.minimum_height ########
+                cols: 1
+
+                Label:
+                    text: "Jeudi soir"
+                    bold: True
+                    color: background.txt_color
+                    font_size: menu.size[0]/10  #Taille de la police
+                    size_hint_y: None 
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: "Entr"+u'\u00E9'+"e"
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.entree_jeudi_soir if (app.bio(root.entree_jeudi_soir) == False) else root.entree_jeudi_soir[:root.entree_jeudi_soir.index("*")] +"[i][color=#0EA33E]"+ root.entree_jeudi_soir[root.entree_jeudi_soir.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Plat principal'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.plat_jeudi_soir if (app.bio(root.plat_jeudi_soir) == False) else root.plat_jeudi_soir[:root.plat_jeudi_soir.index("*")] +"[i][color=#0EA33E]"+ root.plat_jeudi_soir[root.plat_jeudi_soir.index("*"):].replace('*', "") + "[/color][/i]" 
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color
+                
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label: 
+                    text: 'Produits laitiers'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.laitier_jeudi_soir if (app.bio(root.laitier_jeudi_soir) == False) else root.laitier_jeudi_soir[:root.laitier_jeudi_soir.index("*")] +"[i][color=#0EA33E]"+ root.laitier_jeudi_soir[root.laitier_jeudi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color  
+
+                Label:
+                    text: ""
+                    size_hint_y: None
+                    
+                Label:         
+                    text: 'Desserts'
+                    color: background.txt_color
+                    underline: True
+                    font_size: menu.size[0]/15
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    
+                Label:
+                    markup: True
+                    text: root.dessert_jeudi_soir if (app.bio(root.dessert_jeudi_soir) == False) else root.dessert_jeudi_soir[:root.dessert_jeudi_soir.index("*")] +"[i][color=#0EA33E]"+ root.dessert_jeudi_soir[root.dessert_jeudi_soir.index("*"):].replace('*', "") + "[/color][/i]"
+                    font_size: menu.size[0]/30
+                    size_hint_y: None
+                    halign: 'center'
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: background.txt_color 
+                    
+                Label:
+                    text: ""
+                    size_hint_y: None
+                
+        ToggleButton:
+            #Bouton faisant apparaître le menu déroulant#
+            id: slide       #Référencement
+            pos:[0,root.height - root.height/ 10]##
+            size_hint: None,None
+            size: self.size[0], self.size[1]
+            background_color: (0, 0, 0, 0)    #Bouton invisible et de conditions
+            on_state:
+                #S'il n'est pas enclenché, ouvrir le menu déroulant
+                if self.state == "down": \
+                app.root.animate_button(sliding_menu)
+                #S'il est enclenché, le fermer.
+                elif self.state == "normal": \
+                app.root.deanimate_button(sliding_menu)
+            #Les 3 bandes blanches#
+            canvas:
+                Color: 
+                    rgb: [1, 1, 1] 
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 10]
+                Rectangle: 
+                    size: [root.height/20,2]
+                    pos: [10,root.height - root.height/25 - 20]
+        SlidingPopup:
+            #Référencement avec la classe en haut du code#
+            id: sliding_menu
+            size_hint:.3, None
+            size: [0, root.height - root.height/10]##
+            right_hint: 0
+            pos_hint: {"bottom": 1, "right": self.right_hint}
+            
